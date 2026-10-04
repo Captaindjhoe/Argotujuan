@@ -14,10 +14,10 @@ body { background: #0f172a; min-height: 100vh; display: flex; justify-content: c
 .content { display: flex; flex: 1; }
 @media (max-width: 800px) { .content { flex-direction: column; } }
 .panel { padding: 24px; }
-.panel-left { width: 40%; background: #f8fafc; border-right: 2px solid #e2e8f0; }
-@media (max-width: 800px) { .panel-left { width: 100%; border-right: none; border-bottom: 2px solid #e2e8f0; } }
+.panel-left { width: 40%; background: #f8fafc; border-right: 2px solid #e2e8f0; max-height: 90vh; overflow-y: auto; }
+@media (max-width: 800px) { .panel-left { width: 100%; border-right: none; border-bottom: 2px solid #e2e8f0; max-height: none; } }
 .panel-right { width: 60%; position: relative; }
-@media (max-width: 800px) { .panel-right { width: 100%; height: 350px; } }
+@media (max-width: 800px) { .panel-right { width: 100%; height: 400px; } }
 #map { width: 100%; height: 100%; min-height: 400px; }
 .section-title { font-size: 13px; font-weight: 700; color: #1e3c72; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e0e7ff; display: flex; align-items: center; gap: 6px; }
 .form-group { margin-bottom: 14px; }
@@ -33,10 +33,14 @@ body { background: #0f172a; min-height: 100vh; display: flex; justify-content: c
 .btn-outline:hover { border-color: #0f9b0f; color: #0f9b0f; }
 .btn-gps { background: #3b82f6; color: #fff; margin-bottom: 8px; font-size: 12px; padding: 10px; }
 .btn-gps:hover { background: #2563eb; }
+.btn-gps:disabled { opacity: .5; cursor: not-allowed; }
+.btn-map { background: #dc2626; color: #fff; margin-bottom: 8px; font-size: 12px; padding: 10px; }
+.btn-map:hover { background: #b91c1c; }
+.btn-map.active { background: #ef4444; animation: pulse-btn 1.5s infinite; }
+@keyframes pulse-btn { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.7); } 50% { box-shadow: 0 0 0 10px rgba(239,68,68,0); } }
 .hasil-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 14px; padding: 16px; margin-top: 16px; }
 .hasil-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; color: #374151; }
 .hasil-row.total { border-top: 2px solid #0f9b0f; margin-top: 8px; padding-top: 12px; font-size: 20px; font-weight: 800; color: #0f9b0f; }
-.hasil-row.diskon { color: #dc2626; font-weight: 700; }
 .badge { display: inline-block; background: #0f9b0f; color: #fff; font-size: 9px; padding: 2px 8px; border-radius: 20px; margin-left: 6px; letter-spacing: .5px; }
 .driver-info { background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #1e40af; margin-top: 16px; line-height: 1.6; }
 .driver-info strong { color: #1e3a8a; }
@@ -46,8 +50,53 @@ body { background: #0f172a; min-height: 100vh; display: flex; justify-content: c
 .status-msg.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
 .status-msg.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: block; }
 .status-msg.info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; display: block; }
+.status-msg.warning { background: #fffbeb; color: #92400e; border: 1px solid #fcd34d; display: block; }
 .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin .6s linear infinite; margin-right: 6px; vertical-align: middle; }
 @keyframes spin { to { transform: rotate(360deg); } }
+/* OVERLAY PETUNJUK MAP */
+.map-overlay {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(220, 38, 38, .95);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  box-shadow: 0 4px 20px rgba(220,38,38,.6);
+  z-index: 10;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  animation: bounce 1s infinite;
+  pointer-events: none;
+}
+.map-overlay.show { display: flex; }
+@keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-3px); } }
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #0f9b0f;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  z-index: 9999;
+  opacity: 0;
+  transition: all .3s;
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 @media print { body { background: #fff; } .header, .panel-left, .btn, .driver-info, .tarif-info { display: none !important; } .panel-right { display: none !important; } .container { box-shadow: none; max-width: 100%; } }
 </style>
 </head>
@@ -60,19 +109,21 @@ body { background: #0f172a; min-height: 100vh; display: flex; justify-content: c
   </div>
 
   <div class="content">
-    <!-- PANEL KIRI: INPUT & HASIL -->
     <div class="panel panel-left">
       <div class="section-title">📍 Tentukan Tujuan</div>
 
+      <!-- TITIK AWAL (readonly, auto GPS) -->
       <div class="form-group">
         <label>Titik Awal (Jemput)</label>
-        <input type="text" id="origin" placeholder="Mendeteksi lokasi Anda..." autocomplete="off">
-        <button class="btn btn-gps" id="btnGps" onclick="deteksiLokasi()">📡 Gunakan Lokasi Saya</button>
+        <input type="text" id="origin" placeholder="Mendeteksi lokasi Anda..." autocomplete="off" readonly>
+        <button class="btn btn-gps" id="btnGps" onclick="deteksiLokasi()">📡 Perbarui Lokasi</button>
       </div>
 
+      <!-- TUJUAN dengan 2 cara: ketik / tap map -->
       <div class="form-group">
         <label>Tujuan (Drop-off)</label>
-        <input type="text" id="destination" placeholder="Ketik alamat tujuan..." autocomplete="off">
+        <input type="text" id="destination" placeholder="Ketik alamat ATAU tap di peta..." autocomplete="off">
+        <button class="btn btn-map" id="btnMapMode" onclick="toggleMapMode()">🗺️ Pilih dari Peta</button>
       </div>
 
       <button class="btn btn-primary" id="btnHitung" disabled>
@@ -83,8 +134,7 @@ body { background: #0f172a; min-height: 100vh; display: flex; justify-content: c
       <div class="tarif-info">
         <strong>ℹ️ Tarif Argo:</strong><br>
         Buka pintu: <strong>Rp 9.000</strong> (1 km pertama)<br>
-        Per km berikutnya: <strong>Rp 5.300</strong><br>
-        <em>(Tarif dapat diubah di kode)</em>
+        Per km berikutnya: <strong>Rp 5.300</strong>
       </div>
 
       <div class="status-msg" id="statusMsg"></div>
@@ -104,37 +154,48 @@ body { background: #0f172a; min-height: 100vh; display: flex; justify-content: c
       </div>
     </div>
 
-    <!-- PANEL KANAN: MAP -->
     <div class="panel-right">
+      <!-- OVERLAY PETUNJUK -->
+      <div class="map-overlay" id="mapOverlay">
+        👆 Ketuk peta untuk pilih tujuan
+      </div>
       <div id="map"></div>
     </div>
   </div>
 </div>
 
+<!-- TOAST NOTIFIKASI -->
+<div class="toast" id="toast"></div>
+
 <script>
 // ========== KONFIGURASI TARIF ==========
 const TARIF = {
-  bukaPintu: 9000,        // Rp 9.000 untuk 1 km pertama
-  perKm: 5300,            // Rp 5.300 per km berikutnya
-  kapasitasBaterai: 42,   // kWh (VinFast VF e34)
-  hargaKwh: 2500,         // Rp per kWh
-  rangeMaxKm: 400         // Estimasi range maksimum
+  bukaPintu: 9000,
+  perKm: 5300,
+  kapasitasBaterai: 42,
+  hargaKwh: 2500,
+  rangeMaxKm: 400
 };
 
 let map, directionsService, directionsRenderer;
-let autocompleteOrigin, autocompleteDestination;
+let autocompleteDestination;
 let currentDistanceKm = 0;
-let userLocation = null;        // Lokasi user saat ini
-let markerLokasi = null;        // Marker khusus lokasi user
+let userLatLng = null;
+let userAddress = '';
+let markerLokasi = null;
+let markerTujuan = null;         // Marker tujuan yang dipilih dari peta
+let mapMode = false;             // Mode pilih tujuan dari peta
+let tujuanLatLng = null;         // Koordinat tujuan yang dipilih dari peta
 
-// ========== INISIALISASI MAP ==========
+// ========== INIT MAP ==========
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: -6.2088, lng: 106.8456 },
-    zoom: 13,
+    zoom: 14,
     mapTypeControl: false,
     streetViewControl: false,
-    fullscreenControl: false
+    fullscreenControl: false,
+    clickableIcons: false
   });
 
   directionsService = new google.maps.DirectionsService();
@@ -148,31 +209,52 @@ function initMap() {
     }
   });
 
-  const originInput = document.getElementById('origin');
-  const destInput = document.getElementById('destination');
-
-  // Autocomplete untuk origin
-  autocompleteOrigin = new google.maps.places.Autocomplete(originInput, {
-    componentRestrictions: { country: 'id' },
-    fields: ['formatted_address', 'geometry', 'name']
-  });
-
   // Autocomplete untuk destination
+  const destInput = document.getElementById('destination');
   autocompleteDestination = new google.maps.places.Autocomplete(destInput, {
     componentRestrictions: { country: 'id' },
     fields: ['formatted_address', 'geometry', 'name']
   });
 
-  autocompleteOrigin.addListener('place_changed', checkInputs);
-  autocompleteDestination.addListener('place_changed', checkInputs);
+  autocompleteDestination.addListener('place_changed', () => {
+    const place = autocompleteDestination.getPlace();
+    if (place && place.geometry && place.geometry.location) {
+      tujuanLatLng = place.geometry.location;
+      const nama = place.name || '';
+      const alamat = place.formatted_address || '';
+      if (nama && alamat && !alamat.startsWith(nama)) {
+        destInput.value = nama + ', ' + alamat;
+      }
+      // Tampilkan marker tujuan dari autocomplete
+      tampilMarkerTujuan(tujuanLatLng);
+      // Jika tidak dalam map mode, geser peta sedikit
+      if (!mapMode) {
+        map.panTo(tujuanLatLng);
+      }
+    }
+    checkInputs();
+  });
 
-  originInput.addEventListener('input', checkInputs);
-  destInput.addEventListener('input', checkInputs);
+  destInput.addEventListener('input', () => {
+    // Reset tujuan dari peta jika user mengetik manual
+    tujuanLatLng = null;
+    if (markerTujuan) {
+      markerTujuan.setMap(null);
+      markerTujuan = null;
+    }
+    checkInputs();
+  });
 
   document.getElementById('btnHitung').addEventListener('click', hitungArgo);
   document.getElementById('btnReset').addEventListener('click', resetForm);
 
-  // ===== OTOMATIS DETEKSI LOKASI USER SAAT APLIKASI DIBUKA =====
+  // ===== EVENT KLIK PETA =====
+  map.addListener('click', (event) => {
+    if (!mapMode) return;               // Hanya aktif kalau mode peta ON
+    pilihTitikDiPeta(event.latLng);
+  });
+
+  // Auto deteksi lokasi user
   deteksiLokasi();
 }
 
@@ -191,20 +273,17 @@ function deteksiLokasi() {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const { latitude, longitude, accuracy } = position.coords;
-      userLocation = { lat: latitude, lng: longitude };
+      userLatLng = new google.maps.LatLng(latitude, longitude);
+      userAddress = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+      document.getElementById('origin').value = userAddress;
 
-      // Tampilkan koordinat di input origin (dalam format lat,lng agar dikenali Directions API)
-      const koordinat = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
-      document.getElementById('origin').value = koordinat;
+      map.setCenter(userLatLng);
+      map.setZoom(15);
 
-      // Pindahkan peta ke lokasi user
-      map.setCenter(userLocation);
-      map.setZoom(16);
-
-      // Marker khusus lokasi user (biru)
+      // Marker biru untuk lokasi user
       if (markerLokasi) markerLokasi.setMap(null);
       markerLokasi = new google.maps.Marker({
-        position: userLocation,
+        position: userLatLng,
         map: map,
         title: 'Lokasi Anda',
         icon: {
@@ -218,29 +297,27 @@ function deteksiLokasi() {
         animation: google.maps.Animation.DROP
       });
 
-      // Coba reverse geocode untuk dapat nama alamat
+      // Reverse geocode
       const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ location: userLocation }, (results, status) => {
+      geocoder.geocode({ location: userLatLng }, (results, status) => {
         if (status === 'OK' && results[0]) {
-          // Tampilkan alamat di input (lebih enak dibaca dari koordinat)
-          document.getElementById('origin').value = results[0].formatted_address;
-          showStatus('success', `✅ Lokasi ditemukan: ${results[0].formatted_address}`);
+          userAddress = results[0].formatted_address;
+          document.getElementById('origin').value = userAddress;
+          showStatus('success', `✅ Lokasi ditemukan (akurasi ±${Math.round(accuracy)}m)`);
         } else {
-          document.getElementById('origin').value = koordinat;
-          showStatus('success', `✅ Lokasi ditemukan (${koordinat})`);
+          showStatus('success', `✅ Lokasi ditemukan (${userAddress})`);
         }
+        btnGps.textContent = '📡 Perbarui Lokasi';
+        btnGps.disabled = false;
         checkInputs();
       });
-
-      btnGps.textContent = '📡 Perbarui Lokasi';
-      btnGps.disabled = false;
     },
     (error) => {
       let msg = '❌ Gagal deteksi lokasi: ';
       switch(error.code) {
-        case error.PERMISSION_DENIED: msg += 'Izin lokasi ditolak. Aktifkan di pengaturan browser.'; break;
+        case error.PERMISSION_DENIED: msg += 'Izin lokasi ditolak.'; break;
         case error.POSITION_UNAVAILABLE: msg += 'Informasi lokasi tidak tersedia.'; break;
-        case error.TIMEOUT: msg += 'Timeout. Coba klik tombol GPS lagi.'; break;
+        case error.TIMEOUT: msg += 'Timeout. Klik tombol lagi.'; break;
         default: msg += error.message;
       }
       showStatus('error', msg);
@@ -251,20 +328,99 @@ function deteksiLokasi() {
   );
 }
 
+// ========== TOGGLE MAP MODE ==========
+function toggleMapMode() {
+  mapMode = !mapMode;
+  const btn = document.getElementById('btnMapMode');
+  const overlay = document.getElementById('mapOverlay');
+
+  if (mapMode) {
+    btn.classList.add('active');
+    btn.innerHTML = '❌ Batal Pilih dari Peta';
+    overlay.classList.add('show');
+    showStatus('warning', '🗺️ Ketuk/klik peta pada lokasi tujuan');
+    // Zoom out sedikit agar user bisa lihat area lebih luas
+    map.setZoom(Math.min(map.getZoom(), 14));
+  } else {
+    btn.classList.remove('active');
+    btn.innerHTML = '🗺️ Pilih dari Peta';
+    overlay.classList.remove('show');
+    hideStatus();
+  }
+}
+
+// ========== PILIH TITIK DI PETA ==========
+function pilihTitikDiPeta(latLng) {
+  tujuanLatLng = latLng;
+
+  // Tampilkan marker tujuan
+  tampilMarkerTujuan(latLng);
+
+  // Reverse geocode untuk dapat alamat
+  showToast('⏳ Mencari alamat...');
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ location: latLng }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const alamat = results[0].formatted_address;
+      document.getElementById('destination').value = alamat;
+      showToast('✅ Tujuan dipilih!');
+    } else {
+      // Fallback: pakai koordinat
+      const koordinat = `${latLng.lat().toFixed(6)},${latLng.lng().toFixed(6)}`;
+      document.getElementById('destination').value = koordinat;
+      showToast('✅ Tujuan dipilih (koordinat)');
+    }
+
+    // Nonaktifkan map mode setelah memilih
+    if (mapMode) toggleMapMode();
+
+    // Auto hitung argo kalau lokasi user sudah ada
+    if (userLatLng) {
+      setTimeout(() => {
+        hitungArgo();
+      }, 300);
+    } else {
+      showStatus('warning', '⚠️ Lokasi awal belum terdeteksi. Tunggu GPS atau klik Perbarui Lokasi.');
+    }
+  });
+}
+
+// ========== TAMPILKAN MARKER TUJUAN ==========
+function tampilMarkerTujuan(latLng) {
+  if (markerTujuan) markerTujuan.setMap(null);
+
+  markerTujuan = new google.maps.Marker({
+    position: latLng,
+    map: map,
+    title: 'Tujuan',
+    icon: {
+      path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+      fillColor: '#dc2626',
+      fillOpacity: 1,
+      strokeColor: '#fff',
+      strokeWeight: 2,
+      scale: 1.8,
+      anchor: new google.maps.Point(12, 22)
+    },
+    animation: google.maps.Animation.DROP
+  });
+}
+
 // ========== CEK INPUT ==========
 function checkInputs() {
-  const origin = document.getElementById('origin').value.trim();
   const dest = document.getElementById('destination').value.trim();
   const btn = document.getElementById('btnHitung');
-  btn.disabled = !(origin && dest);
+  btn.disabled = !(userLatLng && dest);
 }
 
 // ========== HITUNG ARGO ==========
 function hitungArgo() {
-  const origin = document.getElementById('origin').value.trim();
-  const destination = document.getElementById('destination').value.trim();
+  const destInput = document.getElementById('destination').value.trim();
 
-  if (!origin || !destination) return;
+  if (!userLatLng || !destInput) {
+    showStatus('error', '❌ Pastikan lokasi Anda terdeteksi dan tujuan sudah diisi.');
+    return;
+  }
 
   const btn = document.getElementById('btnHitung');
   const btnText = document.getElementById('btnText');
@@ -272,8 +428,13 @@ function hitungArgo() {
   btnText.innerHTML = '<span class="spinner"></span>Menghitung...';
   hideStatus();
 
+  // Kalau tujuan dari peta (ada latLng), pakai LatLng object langsung
+  // Kalau dari autocomplete juga pakai LatLng object
+  // Kalau diketik manual, pakai string
+  const destination = tujuanLatLng ? tujuanLatLng : destInput;
+
   directionsService.route({
-    origin: origin,
+    origin: userLatLng,
     destination: destination,
     travelMode: google.maps.TravelMode.DRIVING,
     language: 'id',
@@ -293,8 +454,13 @@ function hitungArgo() {
     btnText.textContent = 'Hitung Argo';
   })
   .catch(error => {
-    console.error('Error:', error);
-    showStatus('error', '❌ Gagal menghitung rute. Pastikan alamat valid dan coba lagi.');
+    console.error('Directions error:', error);
+    let errMsg = '❌ Gagal menghitung rute. ';
+    if (error.code === 'NOT_FOUND') errMsg += 'Alamat tujuan tidak ditemukan.';
+    else if (error.code === 'ZERO_RESULTS') errMsg += 'Tidak ada rute yang ditemukan.';
+    else if (error.code === 'OVER_QUERY_LIMIT') errMsg += 'Kuota API habis.';
+    else errMsg += 'Pastikan tujuan valid dan coba lagi.';
+    showStatus('error', errMsg);
     btn.disabled = false;
     btnText.textContent = 'Hitung Argo';
   });
@@ -313,7 +479,7 @@ function hitungBiaya(jarakKm) {
 
   const total = biayaBuka + biayaPerKm;
 
-  document.getElementById('hasilJarak').textContent = `${kmBulat} km`;
+  document.getElementById('hasilJarak').textContent = `${kmBulat} km (${jarakKm.toFixed(2)})`;
   document.getElementById('hasilBuka').textContent = formatRupiah(biayaBuka);
   document.getElementById('hasilPerKm').textContent = biayaPerKm > 0
     ? `${kmBulat - 1} km × ${formatRupiah(TARIF.perKm)} = ${formatRupiah(biayaPerKm)}`
@@ -321,7 +487,6 @@ function hitungBiaya(jarakKm) {
   document.getElementById('hasilTotal').textContent = formatRupiah(total);
   document.getElementById('hasilBox').style.display = 'block';
 
-  // Estimasi charging
   const persenTerpakai = (kmBulat / TARIF.rangeMaxKm) * 100;
   const kwhTerpakai = (persenTerpakai / 100) * TARIF.kapasitasBaterai;
   const biayaCharging = kwhTerpakai * TARIF.hargaKwh;
@@ -349,6 +514,15 @@ function hideStatus() {
   document.getElementById('statusMsg').textContent = '';
 }
 
+let toastTimer = null;
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
 function resetForm() {
   document.getElementById('origin').value = '';
   document.getElementById('destination').value = '';
@@ -357,31 +531,30 @@ function resetForm() {
   document.getElementById('driverInfo').style.display = 'none';
   hideStatus();
 
-  if (directionsRenderer) {
-    directionsRenderer.setDirections({ routes: [] });
-  }
+  if (directionsRenderer) directionsRenderer.setDirections({ routes: [] });
+  if (markerLokasi) { markerLokasi.setMap(null); markerLokasi = null; }
+  if (markerTujuan) { markerTujuan.setMap(null); markerTujuan = null; }
 
-  // Hapus marker lokasi user
-  if (markerLokasi) {
-    markerLokasi.setMap(null);
-    markerLokasi = null;
-  }
+  userLatLng = null;
+  tujuanLatLng = null;
+  currentDistanceKm = 0;
+
+  // Reset map mode
+  if (mapMode) toggleMapMode();
 
   map.setCenter({ lat: -6.2088, lng: 106.8456 });
   map.setZoom(13);
-  currentDistanceKm = 0;
 
-  // Deteksi ulang lokasi user
   deteksiLokasi();
 }
 
 window.initMap = initMap;
 window.deteksiLokasi = deteksiLokasi;
+window.toggleMapMode = toggleMapMode;
 </script>
 
-<!-- Google Maps API — GANTI YOUR_API_KEY DENGAN API KEY ANDA -->
 <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxFK8lzCpKrgbNZG3GwrxIcrIQlP3WUjs&libraries=places&callback=initMap&language=id&region=id">
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap&language=id&region=id">
 </script>
 
 </body>
