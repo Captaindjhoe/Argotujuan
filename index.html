@@ -3,179 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Argo Taksi Berjalan - Captain Dezca Famz</title>
+<title>Argo Taksi - Captain Dezca Famz</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
 body { background: #0f172a; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 15px; }
 .container { background: #fff; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,.5); width: 100%; max-width: 1000px; overflow: hidden; display: flex; flex-direction: column; }
-.header { background: linear-gradient(135deg, #0f9b0f 0%, #1e7e1e 100%); color: #fff; padding: 20px 28px; text-align: center; position: relative; }
+.header { background: linear-gradient(135deg, #0f9b0f 0%, #1e7e1e 100%); color: #fff; padding: 20px 28px; text-align: center; }
 .header h1 { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
 .header p { font-size: 12px; opacity: .9; margin-top: 4px; letter-spacing: 1px; }
-.header .live-badge { display: inline-block; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); font-size: 10px; padding: 3px 10px; border-radius: 20px; margin-top: 6px; letter-spacing: 1px; }
-.header .live-badge .dot { display: inline-block; width: 7px; height: 7px; background: #22c55e; border-radius: 50%; margin-right: 5px; animation: pulse 1.5s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
 .content { display: flex; flex: 1; }
 @media (max-width: 800px) { .content { flex-direction: column; } }
 .panel { padding: 24px; }
-.panel-left { width: 45%; background: #f8fafc; border-right: 2px solid #e2e8f0; max-height: 90vh; overflow-y: auto; }
-@media (max-width: 800px) { .panel-left { width: 100%; border-right: none; border-bottom: 2px solid #e2e8f0; max-height: none; } }
-.panel-right { width: 55%; position: relative; }
+.panel-left { width: 40%; background: #f8fafc; border-right: 2px solid #e2e8f0; }
+@media (max-width: 800px) { .panel-left { width: 100%; border-right: none; border-bottom: 2px solid #e2e8f0; } }
+.panel-right { width: 60%; position: relative; }
 @media (max-width: 800px) { .panel-right { width: 100%; height: 350px; } }
-#map { width: 100%; height: 100%; min-height: 450px; }
+#map { width: 100%; height: 100%; min-height: 400px; }
 .section-title { font-size: 13px; font-weight: 700; color: #1e3c72; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e0e7ff; display: flex; align-items: center; gap: 6px; }
-/* ARGO DISPLAY */
-.argo-display { background: linear-gradient(135deg, #0f2027 0%, #203a43 100%); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 16px; box-shadow: inset 0 0 20px rgba(15,155,15,.3); position: relative; overflow: hidden; }
-.argo-display::before { content: ''; position: absolute; top: -50%; right: -30%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(15,155,15,.4), transparent 70%); border-radius: 50%; }
-.argo-display .label { font-size: 10px; color: #94a3b8; letter-spacing: 3px; text-transform: uppercase; position: relative; z-index: 1; }
-.argo-display .harga { font-size: 42px; font-weight: 900; color: #0f9b0f; line-height: 1; letter-spacing: -1px; margin-top: 6px; text-shadow: 0 0 30px rgba(15,155,15,.7); position: relative; z-index: 1; font-variant-numeric: tabular-nums; }
-.argo-display .harga .currency { font-size: 18px; vertical-align: super; }
-.argo-display .status { font-size: 11px; color: #94a3b8; margin-top: 8px; position: relative; z-index: 1; }
-.argo-display .status.running { color: #22c55e; font-weight: 700; }
-.argo-display .status.running::before { content: '● '; animation: pulse 1.5s infinite; }
-.argo-display .status.paused { color: #f59e0b; font-weight: 700; }
-.argo-display .status.stopped { color: #94a3b8; }
-.argo-display .status.macet { color: #ef4444; font-weight: 700; }
-.argo-display .status.macet::before { content: '⚠ '; }
-/* BREAKDOWN */
-.breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; position: relative; z-index: 1; }
-.breakdown-item { background: rgba(255,255,255,.08); backdrop-filter: blur(10px); border-radius: 10px; padding: 8px 10px; text-align: center; }
-.breakdown-item .label { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; }
-.breakdown-item .value { font-size: 14px; font-weight: 800; color: #fff; margin-top: 2px; font-variant-numeric: tabular-nums; }
-.breakdown-item.jarak .value { color: #22c55e; }
-.breakdown-item.waktu .value { color: #f59e0b; }
-/* STATS */
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-.stat-box { background: #fff; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px; text-align: center; }
-.stat-box .label { font-size: 9px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-.stat-box .value { font-size: 18px; font-weight: 800; color: #1e3c72; font-variant-numeric: tabular-nums; }
-.stat-box .unit { font-size: 10px; color: #9ca3af; font-weight: 500; }
-.stat-box.green .value { color: #0f9b0f; }
-.stat-box.orange .value { color: #f59e0b; }
-.stat-box.red .value { color: #dc2626; }
-/* BUTTONS */
-.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; transition: .2s; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.btn-start { background: linear-gradient(135deg, #0f9b0f, #1e7e1e); color: #fff; box-shadow: 0 4px 14px rgba(15,155,15,.4); }
-.btn-start:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(15,155,15,.6); }
-.btn-pause { background: #f59e0b; color: #fff; }
-.btn-pause:hover:not(:disabled) { background: #d97706; }
-.btn-stop { background: #dc2626; color: #fff; }
-.btn-stop:hover:not(:disabled) { background: #b91c1c; }
-.btn:disabled { opacity: .4; cursor: not-allowed; }
-/* MODE TOGGLE */
-.mode-toggle { display: flex; gap: 8px; margin-bottom: 16px; background: #f1f5f9; padding: 4px; border-radius: 12px; }
-.mode-toggle button { flex: 1; padding: 8px; border: none; background: transparent; border-radius: 8px; font-size: 11px; font-weight: 700; color: #64748b; cursor: pointer; text-transform: uppercase; letter-spacing: .5px; transition: .2s; }
-.mode-toggle button.active { background: #fff; color: #0f9b0f; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
-/* TARIF INFO */
-.tarif-info { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 10px 12px; font-size: 11px; color: #92400e; line-height: 1.7; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 11px; font-weight: 600; color: #4b5563; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+.form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 14px; background: #fff; transition: .2s; }
+.form-group input:focus, .form-group select:focus { outline: none; border-color: #0f9b0f; box-shadow: 0 0 0 3px rgba(15,155,15,.1); }
+.form-group input[readonly] { background: #f0fdf4; color: #166534; font-weight: 600; }
+.btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: .2s; text-transform: uppercase; letter-spacing: .5px; }
+.btn-primary { background: linear-gradient(135deg, #0f9b0f, #1e7e1e); color: #fff; box-shadow: 0 4px 14px rgba(15,155,15,.4); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(15,155,15,.5); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-outline { background: #fff; color: #4b5563; border: 2px solid #e5e7eb; margin-top: 8px; }
+.btn-outline:hover { border-color: #0f9b0f; color: #0f9b0f; }
+.btn-gps { background: #3b82f6; color: #fff; margin-bottom: 8px; font-size: 12px; padding: 10px; }
+.btn-gps:hover { background: #2563eb; }
+.hasil-box { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 14px; padding: 16px; margin-top: 16px; }
+.hasil-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; color: #374151; }
+.hasil-row.total { border-top: 2px solid #0f9b0f; margin-top: 8px; padding-top: 12px; font-size: 20px; font-weight: 800; color: #0f9b0f; }
+.hasil-row.diskon { color: #dc2626; font-weight: 700; }
+.badge { display: inline-block; background: #0f9b0f; color: #fff; font-size: 9px; padding: 2px 8px; border-radius: 20px; margin-left: 6px; letter-spacing: .5px; }
+.driver-info { background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #1e40af; margin-top: 16px; line-height: 1.6; }
+.driver-info strong { color: #1e3a8a; }
+.tarif-info { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 8px 12px; font-size: 11px; color: #92400e; margin-top: 12px; line-height: 1.6; }
 .tarif-info strong { color: #78350f; }
-/* GPS STATUS */
-.gps-status { font-size: 10px; padding: 6px 10px; border-radius: 8px; margin-bottom: 10px; text-align: center; display: none; }
-.gps-status.searching { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; display: block; }
-.gps-status.active { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: block; }
-.gps-status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
-/* RIWAYAT */
-.riwayat-box { background: #fff; border: 2px solid #e5e7eb; border-radius: 12px; padding: 14px; margin-top: 16px; max-height: 200px; overflow-y: auto; }
-.riwayat-box .item { display: flex; flex-direction: column; gap: 3px; font-size: 12px; padding: 8px 0; border-bottom: 1px dashed #e5e7eb; color: #4b5563; }
-.riwayat-box .item:last-child { border-bottom: none; }
-.riwayat-box .item .row { display: flex; justify-content: space-between; }
-.riwayat-box .item .detail { font-size: 10px; color: #9ca3af; }
-.riwayat-box .empty { font-size: 11px; color: #9ca3af; text-align: center; padding: 12px; font-style: italic; }
-.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin .6s linear infinite; margin-right: 6px; }
+.status-msg { text-align: center; font-size: 12px; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
+.status-msg.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
+.status-msg.success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; display: block; }
+.status-msg.info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; display: block; }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin .6s linear infinite; margin-right: 6px; vertical-align: middle; }
 @keyframes spin { to { transform: rotate(360deg); } }
-/* WARNING MACET */
-.traffic-alert { background: #fef2f2; border: 2px solid #fecaca; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #991b1b; margin-bottom: 12px; display: none; align-items: center; gap: 10px; }
-.traffic-alert.show { display: flex; }
-.traffic-alert .icon { font-size: 20px; }
-.traffic-alert strong { color: #7f1d1d; }
+@media print { body { background: #fff; } .header, .panel-left, .btn, .driver-info, .tarif-info { display: none !important; } .panel-right { display: none !important; } .container { box-shadow: none; max-width: 100%; } }
 </style>
 </head>
 <body>
 
 <div class="container">
   <div class="header">
-    <h1>🚕 Argo Taksi Berjalan</h1>
+    <h1>🚕 Argo Taksi</h1>
     <p>Captain Dezca Famz Rent Car — VinFast VF e34</p>
-    <div class="live-badge"><span class="dot"></span> GPS LIVE MODE</div>
   </div>
 
   <div class="content">
+    <!-- PANEL KIRI: INPUT & HASIL -->
     <div class="panel panel-left">
+      <div class="section-title">📍 Tentukan Tujuan</div>
 
-      <div class="mode-toggle">
-        <button id="modeLive" class="active" onclick="setMode('live')">📡 GPS Live</button>
-        <button id="modeDemo" onclick="setMode('demo')">🎮 Demo</button>
+      <div class="form-group">
+        <label>Titik Awal (Jemput)</label>
+        <input type="text" id="origin" placeholder="Mendeteksi lokasi Anda..." autocomplete="off">
+        <button class="btn btn-gps" id="btnGps" onclick="deteksiLokasi()">📡 Gunakan Lokasi Saya</button>
       </div>
 
-      <div class="gps-status" id="gpsStatus"></div>
-
-      <!-- WARNING MACET -->
-      <div class="traffic-alert" id="trafficAlert">
-        <span class="icon">🚦</span>
-        <div>
-          <strong>Kendaraan Terdeteksi Diam</strong><br>
-          <span id="trafficText">Argo tetap berjalan berdasarkan waktu tunggu</span>
-        </div>
+      <div class="form-group">
+        <label>Tujuan (Drop-off)</label>
+        <input type="text" id="destination" placeholder="Ketik alamat tujuan..." autocomplete="off">
       </div>
 
-      <!-- ARGO DISPLAY -->
-      <div class="argo-display">
-        <div class="label">TOTAL ARGO</div>
-        <div class="harga"><span class="currency">Rp</span> <span id="argoTotal">0</span></div>
-        <div class="status stopped" id="argoStatus">Argo Berhenti</div>
-
-        <div class="breakdown">
-          <div class="breakdown-item jarak">
-            <div class="label">Argo Jarak</div>
-            <div class="value" id="argoJarakPart">Rp 0</div>
-          </div>
-          <div class="breakdown-item waktu">
-            <div class="label">Argo Waktu</div>
-            <div class="value" id="argoWaktuPart">Rp 0</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STATS -->
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="label">Jarak</div>
-          <div class="value" id="statJarak">0.00</div>
-          <div class="unit">km</div>
-        </div>
-        <div class="stat-box green">
-          <div class="label">Kecepatan</div>
-          <div class="value" id="statKecepatan">0</div>
-          <div class="unit">km/jam</div>
-        </div>
-        <div class="stat-box orange">
-          <div class="label">Waktu Tunggu</div>
-          <div class="value" id="statWaktuTunggu">00:00</div>
-          <div class="unit">menit</div>
-        </div>
-        <div class="stat-box green">
-          <div class="label">Baterai</div>
-          <div class="value" id="statBaterai">100</div>
-          <div class="unit">%</div>
-        </div>
-      </div>
-
-      <button class="btn btn-start" id="btnStart" onclick="startArgo()" disabled>⏳ Menunggu GPS...</button>
-      <button class="btn btn-pause" id="btnPause" onclick="pauseArgo()" disabled>⏸️ Pause</button>
-      <button class="btn btn-stop" id="btnStop" onclick="stopArgo()" disabled>⏹️ Stop & Reset</button>
+      <button class="btn btn-primary" id="btnHitung" disabled>
+        <span id="btnText">Hitung Argo</span>
+      </button>
+      <button class="btn btn-outline" id="btnReset">Reset</button>
 
       <div class="tarif-info">
         <strong>ℹ️ Tarif Argo:</strong><br>
-        • Buka pintu: <strong>Rp 9.000</strong> (1 km pertama)<br>
-        • Per km berikutnya: <strong>Rp 5.300</strong><br>
-        • <strong>Argo tetap berjalan saat macet/menunggu</strong><br>
-        • Tarif tunggu: <strong>Rp 50.000/jam</strong> (Rp 833/menit)
+        Buka pintu: <strong>Rp 9.000</strong> (1 km pertama)<br>
+        Per km berikutnya: <strong>Rp 5.300</strong><br>
+        <em>(Tarif dapat diubah di kode)</em>
       </div>
 
-      <div class="riwayat-box" id="riwayatBox">
-        <div class="empty">Belum ada perjalanan</div>
+      <div class="status-msg" id="statusMsg"></div>
+
+      <div class="hasil-box" id="hasilBox" style="display:none;">
+        <div class="section-title" style="border:none;margin-bottom:8px;">💰 Rincian Argo</div>
+        <div class="hasil-row"><span>Jarak Tempuh</span><span id="hasilJarak">-</span></div>
+        <div class="hasil-row"><span>Tarif Buka Pintu</span><span id="hasilBuka">-</span></div>
+        <div class="hasil-row"><span>Tarif per Km</span><span id="hasilPerKm">-</span></div>
+        <div class="hasil-row total"><span>TOTAL ARGO</span><span id="hasilTotal">-</span></div>
+      </div>
+
+      <div class="driver-info" id="driverInfo" style="display:none;">
+        <strong>🚗 Unit:</strong> VinFast VF e34 <span class="badge">⚡ EV</span><br>
+        <strong>Baterai:</strong> <span id="bateraiText">42 kWh</span><br>
+        <strong>Estimasi Charging:</strong> <span id="chargingText">-</span>
       </div>
     </div>
 
+    <!-- PANEL KANAN: MAP -->
     <div class="panel-right">
       <div id="map"></div>
     </div>
@@ -183,494 +112,225 @@ body { background: #0f172a; min-height: 100vh; display: flex; justify-content: c
 </div>
 
 <script>
-// ========== KONFIGURASI ==========
+// ========== KONFIGURASI TARIF ==========
 const TARIF = {
-  bukaPintu: 9000,
-  perKm: 5300,
-  tarifTungguPerJam: 50000,
-  kapasitasBaterai: 42,
-  rangeMaxKm: 400,
-  hargaKwh: 2500,
-  kecepatanMacetKmh: 5,
-  detikMacetBaru: 5,
-  filterNoiseMeter: 3
+  bukaPintu: 9000,        // Rp 9.000 untuk 1 km pertama
+  perKm: 5300,            // Rp 5.300 per km berikutnya
+  kapasitasBaterai: 42,   // kWh (VinFast VF e34)
+  hargaKwh: 2500,         // Rp per kWh
+  rangeMaxKm: 400         // Estimasi range maksimum
 };
 
-// ========== STATE ==========
-let map, marker, watchId = null;
-let currentMode = 'live';
-let argoRunning = false;
-let argoPaused = false;
-let gpsReady = false;               // GPS sudah dapat lokasi pertama
-let totalJarakMeter = 0;
-let totalWaktuTungguMs = 0;
-let lastPosition = null;
-let startTime = null;
-let lastMoveTime = null;
-let isMacet = false;
-let timerInterval = null;
-let demoTimer = null;
-let demoPosition = null;
-let currentLocation = null;         // lokasi terkini untuk mode demo
+let map, directionsService, directionsRenderer;
+let autocompleteOrigin, autocompleteDestination;
+let currentDistanceKm = 0;
+let userLocation = null;        // Lokasi user saat ini
+let markerLokasi = null;        // Marker khusus lokasi user
 
-// ========== INIT MAP ==========
+// ========== INISIALISASI MAP ==========
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: -6.2088, lng: 106.8456 },
-    zoom: 16,
+    zoom: 13,
     mapTypeControl: false,
     streetViewControl: false,
-    fullscreenControl: false,
-    styles: [
-      { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-      { featureType: 'transit', stylers: [{ visibility: 'off' }] }
-    ]
+    fullscreenControl: false
   });
 
-  marker = new google.maps.Marker({
+  directionsService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({
     map: map,
-    position: { lat: -6.2088, lng: 106.8456 },
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 12,
-      fillColor: '#0f9b0f',
-      fillOpacity: 1,
-      strokeColor: '#fff',
-      strokeWeight: 3
-    },
-    title: 'Posisi Taksi'
+    suppressMarkers: false,
+    polylineOptions: {
+      strokeColor: '#0f9b0f',
+      strokeWeight: 6,
+      strokeOpacity: 0.9
+    }
   });
 
-  window.trackPath = new google.maps.Polyline({
-    path: [],
-    geodesic: true,
-    strokeColor: '#0f9b0f',
-    strokeOpacity: 0.9,
-    strokeWeight: 6,
-    map: map
+  const originInput = document.getElementById('origin');
+  const destInput = document.getElementById('destination');
+
+  // Autocomplete untuk origin
+  autocompleteOrigin = new google.maps.places.Autocomplete(originInput, {
+    componentRestrictions: { country: 'id' },
+    fields: ['formatted_address', 'geometry', 'name']
   });
 
-  // ===== PENTING: Dapatkan lokasi awal user =====
-  detectLokasiAwal();
+  // Autocomplete untuk destination
+  autocompleteDestination = new google.maps.places.Autocomplete(destInput, {
+    componentRestrictions: { country: 'id' },
+    fields: ['formatted_address', 'geometry', 'name']
+  });
+
+  autocompleteOrigin.addListener('place_changed', checkInputs);
+  autocompleteDestination.addListener('place_changed', checkInputs);
+
+  originInput.addEventListener('input', checkInputs);
+  destInput.addEventListener('input', checkInputs);
+
+  document.getElementById('btnHitung').addEventListener('click', hitungArgo);
+  document.getElementById('btnReset').addEventListener('click', resetForm);
+
+  // ===== OTOMATIS DETEKSI LOKASI USER SAAT APLIKASI DIBUKA =====
+  deteksiLokasi();
 }
 
-// ========== DETEKSI LOKASI AWAL ==========
-function detectLokasiAwal() {
+// ========== DETEKSI LOKASI USER ==========
+function deteksiLokasi() {
   if (!navigator.geolocation) {
-    updateGpsStatus('error', '❌ Browser tidak mendukung GPS');
+    showStatus('error', '❌ Browser tidak mendukung GPS');
     return;
   }
 
-  updateGpsStatus('searching', '📡 Mendeteksi lokasi Anda...');
+  const btnGps = document.getElementById('btnGps');
+  btnGps.textContent = '⏳ Mendeteksi...';
+  btnGps.disabled = true;
+  showStatus('info', '📡 Mendeteksi lokasi Anda...');
 
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const { latitude, longitude, accuracy } = position.coords;
-      const pos = { lat: latitude, lng: longitude };
-      currentLocation = pos;
+      userLocation = { lat: latitude, lng: longitude };
 
-      // Pindahkan map & marker ke lokasi user
-      map.setCenter(pos);
-      map.setZoom(17);
-      marker.setPosition(pos);
-      lastPosition = pos;
+      // Tampilkan koordinat di input origin (dalam format lat,lng agar dikenali Directions API)
+      const koordinat = `${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+      document.getElementById('origin').value = koordinat;
 
-      // Update riwayat path dengan titik awal
-      window.trackPath.setPath([new google.maps.LatLng(pos)]);
+      // Pindahkan peta ke lokasi user
+      map.setCenter(userLocation);
+      map.setZoom(16);
 
-      updateGpsStatus('active', `✅ Lokasi ditemukan — Akurasi: ±${Math.round(accuracy)}m`);
+      // Marker khusus lokasi user (biru)
+      if (markerLokasi) markerLokasi.setMap(null);
+      markerLokasi = new google.maps.Marker({
+        position: userLocation,
+        map: map,
+        title: 'Lokasi Anda',
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 10,
+          fillColor: '#3b82f6',
+          fillOpacity: 1,
+          strokeColor: '#fff',
+          strokeWeight: 3
+        },
+        animation: google.maps.Animation.DROP
+      });
 
-      // Aktifkan tombol Mulai
-      gpsReady = true;
-      const btn = document.getElementById('btnStart');
-      btn.disabled = false;
-      btn.innerHTML = '▶️ Mulai Argo';
+      // Coba reverse geocode untuk dapat nama alamat
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ location: userLocation }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          // Tampilkan alamat di input (lebih enak dibaca dari koordinat)
+          document.getElementById('origin').value = results[0].formatted_address;
+          showStatus('success', `✅ Lokasi ditemukan: ${results[0].formatted_address}`);
+        } else {
+          document.getElementById('origin').value = koordinat;
+          showStatus('success', `✅ Lokasi ditemukan (${koordinat})`);
+        }
+        checkInputs();
+      });
+
+      btnGps.textContent = '📡 Perbarui Lokasi';
+      btnGps.disabled = false;
     },
     (error) => {
       let msg = '❌ Gagal deteksi lokasi: ';
       switch(error.code) {
         case error.PERMISSION_DENIED: msg += 'Izin lokasi ditolak. Aktifkan di pengaturan browser.'; break;
         case error.POSITION_UNAVAILABLE: msg += 'Informasi lokasi tidak tersedia.'; break;
-        case error.TIMEOUT: msg += 'Timeout. Coba refresh halaman.'; break;
+        case error.TIMEOUT: msg += 'Timeout. Coba klik tombol GPS lagi.'; break;
         default: msg += error.message;
       }
-      updateGpsStatus('error', msg);
-      // Fallback: aktifkan tombol dengan lokasi default Jakarta
-      const btn = document.getElementById('btnStart');
-      btn.disabled = false;
-      btn.innerHTML = '▶️ Mulai Argo (Lokasi Default)';
-      gpsReady = true;
+      showStatus('error', msg);
+      btnGps.textContent = '📡 Gunakan Lokasi Saya';
+      btnGps.disabled = false;
     },
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
   );
 }
 
-// ========== MODE TOGGLE ==========
-function setMode(mode) {
-  if (argoRunning) {
-    if (!confirm('Argo sedang berjalan. Ganti mode akan menghentikan argo. Lanjutkan?')) return;
-    stopArgo();
-  }
-  currentMode = mode;
-  document.getElementById('modeLive').classList.toggle('active', mode === 'live');
-  document.getElementById('modeDemo').classList.toggle('active', mode === 'demo');
-  updateGpsStatus('searching',
-    mode === 'live'
-      ? 'Mode GPS Live — menggunakan lokasi asli perangkat'
-      : 'Mode Demo — simulasi perjalanan dari lokasi Anda saat ini');
+// ========== CEK INPUT ==========
+function checkInputs() {
+  const origin = document.getElementById('origin').value.trim();
+  const dest = document.getElementById('destination').value.trim();
+  const btn = document.getElementById('btnHitung');
+  btn.disabled = !(origin && dest);
 }
 
-function updateGpsStatus(type, text) {
-  const el = document.getElementById('gpsStatus');
-  if (!text) { el.className = 'gps-status'; el.textContent = ''; return; }
-  el.className = 'gps-status ' + type;
-  el.textContent = text;
+// ========== HITUNG ARGO ==========
+function hitungArgo() {
+  const origin = document.getElementById('origin').value.trim();
+  const destination = document.getElementById('destination').value.trim();
+
+  if (!origin || !destination) return;
+
+  const btn = document.getElementById('btnHitung');
+  const btnText = document.getElementById('btnText');
+  btn.disabled = true;
+  btnText.innerHTML = '<span class="spinner"></span>Menghitung...';
+  hideStatus();
+
+  directionsService.route({
+    origin: origin,
+    destination: destination,
+    travelMode: google.maps.TravelMode.DRIVING,
+    language: 'id',
+    region: 'id'
+  })
+  .then(response => {
+    directionsRenderer.setDirections(response);
+    const route = response.routes[0];
+    const leg = route.legs[0];
+    const distanceMeters = leg.distance.value;
+    const distanceKm = distanceMeters / 1000;
+    currentDistanceKm = distanceKm;
+
+    hitungBiaya(distanceKm);
+    showStatus('success', `✅ Rute ditemukan! Jarak: ${distanceKm.toFixed(2)} km`);
+    btn.disabled = false;
+    btnText.textContent = 'Hitung Argo';
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showStatus('error', '❌ Gagal menghitung rute. Pastikan alamat valid dan coba lagi.');
+    btn.disabled = false;
+    btnText.textContent = 'Hitung Argo';
+  });
 }
 
-// ========== START ARGO ==========
-function startArgo() {
-  if (argoRunning || !gpsReady) return;
+// ========== HITUNG BIAYA ==========
+function hitungBiaya(jarakKm) {
+  const kmBulat = Math.ceil(jarakKm);
 
-  if (currentMode === 'live') startGpsTracking();
-  else startDemoTracking();
+  let biayaBuka = TARIF.bukaPintu;
+  let biayaPerKm = 0;
 
-  argoRunning = true;
-  argoPaused = false;
-  startTime = startTime || Date.now();
-  lastMoveTime = Date.now();
-
-  // Reset perhitungan tiap kali mulai argo baru
-  totalJarakMeter = 0;
-  totalWaktuTungguMs = 0;
-
-  // Path dimulai dari lokasi saat ini
-  if (lastPosition) {
-    window.trackPath.setPath([new google.maps.LatLng(lastPosition)]);
-  }
-
-  document.getElementById('btnStart').disabled = true;
-  document.getElementById('btnPause').disabled = false;
-  document.getElementById('btnStop').disabled = false;
-
-  updateArgoStatus();
-  startTimer();
-}
-
-// ========== PAUSE ARGO ==========
-function pauseArgo() {
-  if (!argoRunning) return;
-  argoPaused = !argoPaused;
-
-  const btnPause = document.getElementById('btnPause');
-  if (argoPaused) {
-    btnPause.innerHTML = '▶️ Resume';
-    btnPause.style.background = '#0f9b0f';
-    if (currentMode === 'live') stopGpsTracking();
-    if (currentMode === 'demo') stopDemoTracking();
-  } else {
-    btnPause.innerHTML = '⏸️ Pause';
-    btnPause.style.background = '#f59e0b';
-    lastMoveTime = Date.now();
-    if (currentMode === 'live') startGpsTracking();
-    if (currentMode === 'demo') startDemoTracking();
-  }
-  updateArgoStatus();
-}
-
-// ========== STOP ARGO ==========
-function stopArgo() {
-  if (!argoRunning && totalJarakMeter === 0) return;
-
-  if (currentMode === 'live') stopGpsTracking();
-  if (currentMode === 'demo') stopDemoTracking();
-  stopTimer();
-
-  if (totalJarakMeter > 10) saveToRiwayat();
-
-  argoRunning = false;
-  argoPaused = false;
-  totalJarakMeter = 0;
-  totalWaktuTungguMs = 0;
-  startTime = null;
-  lastMoveTime = null;
-  isMacet = false;
-  window.trackPath.setPath([]);
-  document.getElementById('trafficAlert').classList.remove('show');
-
-  document.getElementById('btnStart').disabled = false;
-  document.getElementById('btnStart').innerHTML = '▶️ Mulai Argo';
-  document.getElementById('btnPause').disabled = true;
-  document.getElementById('btnPause').innerHTML = '⏸️ Pause';
-  document.getElementById('btnPause').style.background = '#f59e0b';
-  document.getElementById('btnStop').disabled = true;
-
-  document.getElementById('argoTotal').textContent = '0';
-  document.getElementById('argoJarakPart').textContent = 'Rp 0';
-  document.getElementById('argoWaktuPart').textContent = 'Rp 0';
-  document.getElementById('statJarak').textContent = '0.00';
-  document.getElementById('statKecepatan').textContent = '0';
-  document.getElementById('statWaktuTunggu').textContent = '00:00';
-  document.getElementById('statBaterai').textContent = '100';
-  updateArgoStatus();
-
-  if (currentMode === 'demo') demoPosition = null;
-}
-
-// ========== GPS TRACKING (LIVE) ==========
-function startGpsTracking() {
-  if (!navigator.geolocation) {
-    updateGpsStatus('error', '❌ Browser tidak mendukung GPS');
-    return;
+  if (kmBulat > 1) {
+    biayaPerKm = (kmBulat - 1) * TARIF.perKm;
   }
 
-  watchId = navigator.geolocation.watchPosition(
-    (position) => {
-      const { latitude, longitude, speed, accuracy } = position.coords;
-      const newPos = { lat: latitude, lng: longitude };
-      const now = Date.now();
-      currentLocation = newPos;
+  const total = biayaBuka + biayaPerKm;
 
-      updateGpsStatus('active', `✅ GPS Aktif — Akurasi: ±${Math.round(accuracy)}m`);
-      marker.setPosition(newPos);
-      map.panTo(newPos);
+  document.getElementById('hasilJarak').textContent = `${kmBulat} km`;
+  document.getElementById('hasilBuka').textContent = formatRupiah(biayaBuka);
+  document.getElementById('hasilPerKm').textContent = biayaPerKm > 0
+    ? `${kmBulat - 1} km × ${formatRupiah(TARIF.perKm)} = ${formatRupiah(biayaPerKm)}`
+    : '-';
+  document.getElementById('hasilTotal').textContent = formatRupiah(total);
+  document.getElementById('hasilBox').style.display = 'block';
 
-      if (lastPosition && !argoPaused) {
-        const jarak = hitungJarakMeter(lastPosition, newPos);
-        const speedKmh = (speed !== null && speed !== undefined && speed > 0) ? speed * 3.6 : 0;
+  // Estimasi charging
+  const persenTerpakai = (kmBulat / TARIF.rangeMaxKm) * 100;
+  const kwhTerpakai = (persenTerpakai / 100) * TARIF.kapasitasBaterai;
+  const biayaCharging = kwhTerpakai * TARIF.hargaKwh;
 
-        if (jarak > TARIF.filterNoiseMeter) {
-          totalJarakMeter += jarak;
-          window.trackPath.getPath().push(new google.maps.LatLng(newPos));
-          lastPosition = newPos;
-          lastMoveTime = now;
-          isMacet = false;
-          document.getElementById('trafficAlert').classList.remove('show');
-        } else {
-          if (lastMoveTime && (now - lastMoveTime) > (TARIF.detikMacetBaru * 1000)) {
-            isMacet = true;
-            document.getElementById('trafficAlert').classList.add('show');
-            const diam = Math.floor((now - lastMoveTime) / 1000);
-            document.getElementById('trafficText').innerHTML =
-              `Kendaraan diam selama <strong>${diam} detik</strong> — argo tetap berjalan`;
-          }
-        }
-
-        updateArgoDisplay(speedKmh);
-      } else {
-        lastPosition = newPos;
-        lastMoveTime = now;
-      }
-    },
-    (error) => {
-      let msg = '❌ Gagal akses GPS: ';
-      switch(error.code) {
-        case error.PERMISSION_DENIED: msg += 'Izin lokasi ditolak.'; break;
-        case error.POSITION_UNAVAILABLE: msg += 'Informasi lokasi tidak tersedia.'; break;
-        case error.TIMEOUT: msg += 'Timeout. Coba lagi.'; break;
-        default: msg += error.message;
-      }
-      updateGpsStatus('error', msg);
-    },
-    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-  );
-}
-
-function stopGpsTracking() {
-  if (watchId !== null) {
-    navigator.geolocation.clearWatch(watchId);
-    watchId = null;
-  }
-}
-
-// ========== DEMO TRACKING (mulai dari lokasi user) ==========
-function startDemoTracking() {
-  updateGpsStatus('active', '🎮 Mode Demo — simulasi dari lokasi Anda');
-
-  if (!demoPosition) {
-    // Mulai dari lokasi user saat ini (atau default jika tidak ada)
-    demoPosition = currentLocation
-      ? { lat: currentLocation.lat, lng: currentLocation.lng }
-      : { lat: -6.1754, lng: 106.8272 };
-    lastPosition = demoPosition;
-    lastMoveTime = Date.now();
-    marker.setPosition(demoPosition);
-    map.setCenter(demoPosition);
-    map.setZoom(17);
-    window.trackPath.setPath([new google.maps.LatLng(demoPosition)]);
-    window.demoStartTime = Date.now();
-  }
-
-  const meterPerTick = 5.5;
-
-  demoTimer = setInterval(() => {
-    if (argoPaused) return;
-
-    const elapsed = Date.now() - (window.demoStartTime || Date.now());
-    const cycle = Math.floor(elapsed / 1000) % 30;
-
-    if (cycle < 20) {
-      // BERGERAK
-      const rad = Math.PI / 4;
-      demoPosition = {
-        lat: demoPosition.lat + (meterPerTick * Math.sin(rad)) / 111320,
-        lng: demoPosition.lng + (meterPerTick * Math.cos(rad)) / (111320 * Math.cos(demoPosition.lat * Math.PI / 180))
-      };
-      const newPos = demoPosition;
-      marker.setPosition(newPos);
-      map.panTo(newPos);
-
-      if (lastPosition) {
-        const jarak = hitungJarakMeter(lastPosition, newPos);
-        totalJarakMeter += jarak;
-        window.trackPath.getPath().push(new google.maps.LatLng(newPos));
-      }
-      lastPosition = newPos;
-      lastMoveTime = Date.now();
-      isMacet = false;
-      document.getElementById('trafficAlert').classList.remove('show');
-
-      updateArgoDisplay(40);
-    } else {
-      // MACET
-      isMacet = true;
-      document.getElementById('trafficAlert').classList.add('show');
-      document.getElementById('trafficText').innerHTML =
-        `Kendaraan diam (simulasi macet) — argo tetap berjalan berdasarkan waktu`;
-      updateArgoDisplay(0);
-    }
-  }, 500);
-}
-
-function stopDemoTracking() {
-  if (demoTimer) { clearInterval(demoTimer); demoTimer = null; }
-}
-
-// ========== HITUNG JARAK ==========
-function hitungJarakMeter(pos1, pos2) {
-  const R = 6371000;
-  const lat1 = pos1.lat * Math.PI / 180;
-  const lat2 = pos2.lat * Math.PI / 180;
-  const dLat = (pos2.lat - pos1.lat) * Math.PI / 180;
-  const dLng = (pos2.lng - pos1.lng) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(lat1) * Math.cos(lat2) *
-            Math.sin(dLng/2) * Math.sin(dLng/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-}
-
-// ========== UPDATE ARGO ==========
-function updateArgoDisplay(kecepatanKmh) {
-  const jarakKm = totalJarakMeter / 1000;
-  const jarakBulat = Math.ceil(jarakKm * 10) / 10;
-
-  let argoJarak = TARIF.bukaPintu;
-  if (jarakBulat > 1) argoJarak += (jarakBulat - 1) * TARIF.perKm;
-
-  const argoWaktu = (totalWaktuTungguMs / 1000) * (TARIF.tarifTungguPerJam / 3600);
-  const total = argoJarak + argoWaktu;
-
-  document.getElementById('argoTotal').textContent = Math.round(total).toLocaleString('id-ID');
-  document.getElementById('argoJarakPart').textContent = 'Rp ' + Math.round(argoJarak).toLocaleString('id-ID');
-  document.getElementById('argoWaktuPart').textContent = 'Rp ' + Math.round(argoWaktu).toLocaleString('id-ID');
-  document.getElementById('statJarak').textContent = jarakKm.toFixed(2);
-  document.getElementById('statKecepatan').textContent = Math.round(kecepatanKmh);
-
-  const tungguDetik = Math.floor(totalWaktuTungguMs / 1000);
-  const tungguMenit = Math.floor(tungguDetik / 60);
-  const sisaDetik = tungguDetik % 60;
-  document.getElementById('statWaktuTunggu').textContent =
-    String(tungguMenit).padStart(2, '0') + ':' + String(sisaDetik).padStart(2, '0');
-
-  const persenTerpakai = Math.min(100, (jarakKm / TARIF.rangeMaxKm) * 100);
-  document.getElementById('statBaterai').textContent = Math.round(Math.max(0, 100 - persenTerpakai));
-}
-
-// ========== UPDATE STATUS ==========
-function updateArgoStatus() {
-  const el = document.getElementById('argoStatus');
-  if (!argoRunning) {
-    el.className = 'status stopped';
-    el.textContent = 'Argo Berhenti';
-  } else if (argoPaused) {
-    el.className = 'status paused';
-    el.textContent = 'Argo Pause';
-  } else if (isMacet) {
-    el.className = 'status macet';
-    el.textContent = 'Macet — Argo Tetap Jalan';
-  } else {
-    el.className = 'status running';
-    el.textContent = 'Argo Berjalan';
-  }
-}
-
-// ========== TIMER ==========
-function startTimer() {
-  if (timerInterval) clearInterval(timerInterval);
-  let lastTick = Date.now();
-
-  timerInterval = setInterval(() => {
-    if (!argoRunning || argoPaused) { lastTick = Date.now(); return; }
-
-    const now = Date.now();
-    const deltaMs = now - lastTick;
-    lastTick = now;
-
-    const diamMs = lastMoveTime ? (now - lastMoveTime) : 0;
-    const sedangMacet = diamMs >= (TARIF.detikMacetBaru * 1000);
-
-    if (sedangMacet) {
-      totalWaktuTungguMs += deltaMs;
-      isMacet = true;
-    } else {
-      isMacet = false;
-    }
-
-    updateArgoStatus();
-    const kecepatanSkrg = parseInt(document.getElementById('statKecepatan').textContent) || 0;
-    updateArgoDisplay(kecepatanSkrg);
-  }, 1000);
-}
-
-function stopTimer() {
-  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-}
-
-// ========== RIWAYAT ==========
-function saveToRiwayat() {
-  const jarakKm = totalJarakMeter / 1000;
-  const jarakBulat = Math.ceil(jarakKm * 10) / 10;
-  let argoJarak = TARIF.bukaPintu;
-  if (jarakBulat > 1) argoJarak += (jarakBulat - 1) * TARIF.perKm;
-  const argoWaktu = (totalWaktuTungguMs / 1000) * (TARIF.tarifTungguPerJam / 3600);
-  const total = argoJarak + argoWaktu;
-
-  const durasiMs = startTime ? (Date.now() - startTime) : 0;
-  const durasiMenit = Math.floor(durasiMs / 60000);
-
-  const riwayatBox = document.getElementById('riwayatBox');
-  if (riwayatBox.querySelector('.empty')) riwayatBox.innerHTML = '';
-
-  const now = new Date();
-  const jam = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-
-  const item = document.createElement('div');
-  item.className = 'item';
-  item.innerHTML = `
-    <div class="row">
-      <span>🕐 ${jam} — ${jarakKm.toFixed(2)} km (${durasiMenit} mnt)</span>
-      <strong style="color:#0f9b0f;">${formatRupiah(total)}</strong>
-    </div>
-    <div class="detail">
-      Jarak: ${formatRupiah(argoJarak)} • Tunggu: ${formatRupiah(argoWaktu)}
-      (${formatDurasiTunggu(totalWaktuTungguMs)})
-    </div>
-  `;
-  riwayatBox.insertBefore(item, riwayatBox.firstChild);
-
-  while (riwayatBox.children.length > 10) {
-    riwayatBox.removeChild(riwayatBox.lastChild);
-  }
+  document.getElementById('bateraiText').textContent = `${TARIF.kapasitasBaterai} kWh`;
+  document.getElementById('chargingText').textContent = persenTerpakai > 100
+    ? 'Perlu charging penuh'
+    : `~${persenTerpakai.toFixed(1)}% (${kwhTerpakai.toFixed(1)} kWh) ≈ ${formatRupiah(biayaCharging)}`;
+  document.getElementById('driverInfo').style.display = 'block';
 }
 
 // ========== UTILITAS ==========
@@ -678,25 +338,50 @@ function formatRupiah(angka) {
   return 'Rp ' + Math.round(angka).toLocaleString('id-ID');
 }
 
-function formatDurasiTunggu(ms) {
-  const detik = Math.floor(ms / 1000);
-  const menit = Math.floor(detik / 60);
-  const sisa = detik % 60;
-  if (menit === 0) return `${sisa} dtk`;
-  return `${menit} mnt ${sisa} dtk`;
+function showStatus(type, message) {
+  const el = document.getElementById('statusMsg');
+  el.className = 'status-msg ' + type;
+  el.textContent = message;
 }
 
-// ========== STARTUP ==========
+function hideStatus() {
+  document.getElementById('statusMsg').className = 'status-msg';
+  document.getElementById('statusMsg').textContent = '';
+}
+
+function resetForm() {
+  document.getElementById('origin').value = '';
+  document.getElementById('destination').value = '';
+  document.getElementById('btnHitung').disabled = true;
+  document.getElementById('hasilBox').style.display = 'none';
+  document.getElementById('driverInfo').style.display = 'none';
+  hideStatus();
+
+  if (directionsRenderer) {
+    directionsRenderer.setDirections({ routes: [] });
+  }
+
+  // Hapus marker lokasi user
+  if (markerLokasi) {
+    markerLokasi.setMap(null);
+    markerLokasi = null;
+  }
+
+  map.setCenter({ lat: -6.2088, lng: 106.8456 });
+  map.setZoom(13);
+  currentDistanceKm = 0;
+
+  // Deteksi ulang lokasi user
+  deteksiLokasi();
+}
+
 window.initMap = initMap;
-window.setMode = setMode;
-window.startArgo = startArgo;
-window.pauseArgo = pauseArgo;
-window.stopArgo = stopArgo;
+window.deteksiLokasi = deteksiLokasi;
 </script>
 
-<!-- Google Maps API — GANTI YOUR_API_KEY -->
+<!-- Google Maps API — GANTI YOUR_API_KEY DENGAN API KEY ANDA -->
 <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxFK8lzCpKrgbNZG3GwrxIcrIQlP3WUjs&callback=initMap&language=id&region=id">
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxFK8lzCpKrgbNZG3GwrxIcrIQlP3WUjs&libraries=places&callback=initMap&language=id&region=id">
 </script>
 
 </body>
